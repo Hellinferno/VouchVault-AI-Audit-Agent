@@ -72,7 +72,7 @@ def run_vouch_vault(invoice_data, bank_data):
                         diff = abs(inv_total - bank_total)
                         
                         if diff > 0:
-                            hint_msg = f"The difference is exactly ${diff:.2f}. Check if this amount corresponds to a tax deduction (TDS) or discount."
+                            hint_msg = f"The difference is exactly {diff:.2f}. Check if this amount corresponds to a tax deduction (TDS) or discount."
                 except:
                     hint_msg = "Check for discounts or partial payments."
 
