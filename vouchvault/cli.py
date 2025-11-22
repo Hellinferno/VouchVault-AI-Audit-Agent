@@ -4,7 +4,7 @@ import argparse
 from .manager import run_vouch_vault
 from .config import INVOICE_DATA, BANK_STATEMENT_CSV
 
-def run_cli():
+def run_cli() -> None:
     # Force UTF-8 output for Windows consoles
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 

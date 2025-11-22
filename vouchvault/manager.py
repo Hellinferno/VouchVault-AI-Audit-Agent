@@ -1,7 +1,14 @@
+import re
 import time
 from .analyst import AnalystAgent
 
-def run_vouch_vault(invoice_data, bank_data):
+def run_vouch_vault(invoice_data: str, bank_data: str) -> None:
+    # Input validation
+    if not invoice_data or not invoice_data.strip():
+        raise ValueError("Invoice data cannot be empty")
+    if not bank_data or not bank_data.strip():
+        raise ValueError("Bank statement data cannot be empty")
+    
     print("\n🤖 --- VouchVault: Enterprise Audit Agent ---")
     print("----------------------------------------------")
 
@@ -56,7 +63,7 @@ def run_vouch_vault(invoice_data, bank_data):
             if attempts < max_retries:
                 # --- NEW INTELLIGENT LOGIC ---
                 # We try to extract numbers to give a specific hint
-                import re
+                # Re-import moved to top of file
                 try:
                     # Find all numbers like 100.00 in the text
                     inv_vals = [float(x) for x in re.findall(r"(\d+\.\d{2})", invoice_data)]
@@ -73,7 +80,7 @@ def run_vouch_vault(invoice_data, bank_data):
                         
                         if diff > 0:
                             hint_msg = f"The difference is exactly {diff:.2f}. Check if this amount corresponds to a tax deduction (TDS) or discount."
-                except:
+                except (ValueError, IndexError, AttributeError) as e:
                     hint_msg = "Check for discounts or partial payments."
 
                 print(f"🔄 [Manager] Instruction: '{hint_msg}'")
