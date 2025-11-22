@@ -1,5 +1,11 @@
 import math
 
+def calculate_gst(amount: float, rate: float = 0.18) -> float:
+    """
+    Calculates the GST amount based on the base amount and rate.
+    """
+    return round(amount * rate, 2)
+
 def calculate_tax_compliance(subtotal: float, tax_amount: float, tax_rate: float = 0.18) -> dict:
     """
     Calculates if the tax amount on an invoice matches the expected tax rate.
@@ -10,7 +16,7 @@ def calculate_tax_compliance(subtotal: float, tax_amount: float, tax_rate: float
         tax_amount: The tax listed on the invoice.
         tax_rate: The expected tax rate (default 0.18 for 18%).
     """
-    expected_tax = subtotal * tax_rate
+    expected_tax = calculate_gst(subtotal, tax_rate)
     difference = abs(expected_tax - tax_amount)
     
     # We allow a small floating point tolerance (e.g., 5 cents) to avoid false flags
@@ -18,7 +24,7 @@ def calculate_tax_compliance(subtotal: float, tax_amount: float, tax_rate: float
     
     return {
         "is_compliant": is_compliant,
-        "expected_tax": round(expected_tax, 2),
+        "expected_tax": expected_tax,
         "actual_tax": tax_amount,
         "difference": round(difference, 2),
         "status": "MATCH" if is_compliant else "MISMATCH"
@@ -41,3 +47,12 @@ def fuzzy_match_vendor(invoice_vendor: str, bank_statement_text: str) -> dict:
          return {"match_found": True, "vendor": invoice_vendor, "note": "Partial match found"}
          
     return {"match_found": False, "vendor": invoice_vendor}
+
+def match_invoice_to_statement(invoice_amount: float, bank_records: list) -> dict:
+    """
+    Finds a matching transaction in the bank records based on the amount.
+    """
+    for record in bank_records:
+        if float(record["amount"]) == invoice_amount:
+            return record
+    return None

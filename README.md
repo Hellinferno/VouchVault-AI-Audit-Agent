@@ -103,3 +103,9 @@ python main.py \
 - `main.py` – CLI entrypoint
 - `sample_data/` – example invoice and bank statement
 - `requirements.txt` – Python dependencies
+
+## Running Tests
+
+```bash
+pytest -q
+```
