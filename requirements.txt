@@ -1,6 +1,4 @@
 google-generativeai
-pandas
 python-dotenv
-pypdf
 tabulate
 pytest

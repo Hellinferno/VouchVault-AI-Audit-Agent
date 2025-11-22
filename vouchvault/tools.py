@@ -65,9 +65,13 @@ def fuzzy_match_vendor(invoice_vendor: str, bank_statement_text: str) -> dict:
          
     return {"match_found": False, "vendor": invoice_vendor}
 
-def match_invoice_to_statement(invoice_amount: float, bank_records: list) -> dict:
-    """Finds a matching transaction in the bank records based on the amount."""
+def match_invoice_to_statement(invoice_amount: float, bank_records: list) -> dict | None:
+    """
+    Finds a matching transaction in the bank records based on the amount.
+    Uses tolerance for float comparison and handles negative debits.
+    """
     for record in bank_records:
-        if float(record["amount"]) == invoice_amount:
+        record_amount = abs(float(record["amount"]))  # Handle negative debits
+        if abs(record_amount - invoice_amount) < 0.01:  # Tolerance for float comparison
             return record
     return None
