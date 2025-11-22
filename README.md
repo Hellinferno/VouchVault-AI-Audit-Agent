@@ -3,7 +3,7 @@ VouchVault: Autonomous Enterprise Audit Agent
 
 Google AI Agents Intensive Capstone (Enterprise Track)
 
-Author: Ravi (CA Intermediate & AI Engineering Student)
+Author: Ravi | Role: CA Intermediate & AI & Data Science Student
 Role: CA Intermediate & AI Engineer
 
 📖 Project Overview
