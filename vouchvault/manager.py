@@ -54,29 +54,29 @@ def run_vouch_vault(invoice_data, bank_data):
         else:
             print("\n⚠️ [Manager] Discrepancy Detected.")
             if attempts < max_retries:
-                # --- INTELLIGENT MANAGER LOGIC ---
-                # Try to parse numbers to help the agent
+                # --- NEW INTELLIGENT LOGIC ---
+                # We try to extract numbers to give a specific hint
+                import re
                 try:
-                    import re
-                    # Find all dollar amounts in invoice and bank data
-                    inv_amounts = [float(x) for x in re.findall(r"(\d+\.?\d*)", invoice_data)]
-                    bank_amounts = [float(x) for x in re.findall(r"(\d+\.?\d*)", bank_data)]
+                    # Find all numbers like 100.00 in the text
+                    inv_vals = [float(x) for x in re.findall(r"(\d+\.\d{2})", invoice_data)]
+                    bank_vals = [float(x) for x in re.findall(r"(\d+\.\d{2})", bank_data)]
                     
-                    # Calculate difference (use the largest amounts as they're likely the totals)
-                    diff_msg = "Check for discounts or partial payments."
-                    if inv_amounts and bank_amounts:
-                        inv_total = max(inv_amounts)
-                        bank_total = max(bank_amounts)
+                    hint_msg = "Check for discounts or partial payments."
+                    
+                    # If we have numbers, calculate the gap
+                    if inv_vals and bank_vals:
+                        # Assume the largest number is the Total
+                        inv_total = max(inv_vals)
+                        bank_total = max(bank_vals) 
                         diff = abs(inv_total - bank_total)
-                        if diff > 0.01:  # Only mention if difference is meaningful
-                            diff_msg = f"The specific difference is {diff:.2f}. Check if a discount or tax matches this amount."
+                        
+                        if diff > 0:
+                            hint_msg = f"The difference is exactly ${diff:.2f}. Check if this amount corresponds to a tax deduction (TDS) or discount."
                 except:
-                    diff_msg = "Check for discounts or partial payments."
+                    hint_msg = "Check for discounts or partial payments."
 
-                print(f"🔄 [Manager] Instruction: '{diff_msg}'")
-                analyst.inject_message(
-                    f"There is still a discrepancy between the Invoice Total and Bank Transaction. "
-                    f"{diff_msg} Re-calculate and try again."
-                )
+                print(f"🔄 [Manager] Instruction: '{hint_msg}'")
+                analyst.inject_message(f"Audit Failed. {hint_msg} Re-evaluate the transaction.")
             else:
                 print("\n❌ [Manager] Audit Failed after multiple attempts. Flagging for Human Review.")

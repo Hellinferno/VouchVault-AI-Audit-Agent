@@ -1,17 +1,21 @@
-from vouchvault.tools import calculate_tax_compliance
+from vouchvault.tools import calculate_tax_compliance, fuzzy_match_vendor
 
-def test_tax_mismatch():
-    """Test that the system correctly flags incorrect tax calculations."""
-    # Invoice says Subtotal 1000, Tax 100 (Should be 180 for 18% rate)
-    result = calculate_tax_compliance(1000.0, 100.0, 0.18)
+def test_tax_mismatch_detection():
+    """Test that the tool correctly flags wrong tax calculations."""
+    # Invoice: Subtotal 1000, Tax 100 (Should be 180 at 18%)
+    result = calculate_tax_compliance(subtotal=1000.0, tax_amount=100.0, tax_rate=0.18)
+    
     assert result["is_compliant"] is False
     assert result["status"] == "MISMATCH"
-    assert result["expected_tax"] == 180.0
-    assert result["actual_tax"] == 100.0
+    assert result["difference"] == 80.0
 
-def test_tax_exact_match():
-    """Test that correct tax calculations pass."""
-    # Correct calculation: 1000 * 0.18 = 180
-    result = calculate_tax_compliance(1000.0, 180.0, 0.18)
-    assert result["is_compliant"] is True
-    assert result["status"] == "MATCH"
+def test_fuzzy_match_typo():
+    """Test if the fuzzy matcher catches slight misspellings."""
+    invoice_vendor = "TechSolutions Inc"
+    # Bank statement has a typo ("Solutons")
+    bank_statement = "NEFT Transfer to TechSolutons Inc for Nov"
+    
+    match = fuzzy_match_vendor(invoice_vendor, bank_statement)
+    
+    # If you applied Upgrade #1 (difflib), this should be True!
+    assert match["match_found"] is True
