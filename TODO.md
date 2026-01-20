@@ -4,11 +4,11 @@
 - [x] Multi-agent architecture (Manager + Analyst)
 - [x] Tool use with function calling
 - [x] Retry logic with intelligent hints
-- [x] Memory module for audit history
+- [x] Simple in-memory audit history
 - [x] Evaluation metrics tracking
 - [x] Fix regex for Indian number formats
 - [x] Type hints throughout codebase
-- [x] Comprehensive test coverage
+- [ ] Comprehensive test coverage (Needs update after value store removal)
 
 ## Future Enhancements 🔮
 - [ ] PDF invoice parsing with OCR
