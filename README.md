@@ -1,78 +1,50 @@
-# 🏗️ CivicEye: AI Construction Auditor
+# 🛡️ VouchVault: AI Audit Agent
 
-> **Multimodal Evidence-Based Auditing System** for Civic Infrastructure Projects
+**AI-powered financial auditing and compliance verification system.**
 
-[![Qdrant](https://img.shields.io/badge/Vector%20DB-Qdrant-blue)](https://qdrant.tech/)
-[![Gemini](https://img.shields.io/badge/LLM-Gemini%201.5-orange)](https://ai.google.dev/)
-[![Streamlit](https://img.shields.io/badge/UI-Streamlit-red)](https://streamlit.io/)
+VouchVault is an intelligent agent designed to audit invoices, verify bank statements, and ensure tax compliance using advanced LLM reasoning.
 
-## ✨ Features
+## 🚀 Features
 
-| Capability | Description |
-|------------|-------------|
-| **Multimodal Retrieval** | Named vectors for contracts (text) & site photos (images) |
-| **Long-Term Memory** | Stores contractor audit history across projects |
-| **VLM Analysis** | Gemini Vision analyzes site photos against contract clauses |
-| **Evidence-Based** | Every audit decision cites specific documents/photos |
+- **Automated Tax Compliance**: Verifies GST calculations on invoices (18% standard rate).
+- **Vendor Verification**: uses fuzzy matching to reconcile invoice vendors with bank statement records.
+- **Intelligent Analysis**: Uses Google Gemini to reason about discrepancies (e.g., slight amount mismatches due to fees).
+- **Tool-Based Reasoning**: The agent uses specialized Python tools for precise calculations and data matching.
 
-## 🚀 Quick Start
-
-```bash
-# 1. Install dependencies
-pip install -r requirements.txt
-
-# 2. Start Qdrant (Docker)
-docker run -d -p 6333:6333 qdrant/qdrant
-
-# 3. Configure API Key
-echo "GOOGLE_API_KEY=your_key_here" > .env
-
-# 4. Setup & Ingest
-python setup_qdrant.py
-python generate_dummy_data.py
-python ingest_data.py
-
-# 5. Launch Dashboard
-streamlit run dashboard.py
-```
-
-## 🛠️ Agent Tools
-
-| Tool | Purpose |
-|------|---------|
-| `consult_knowledge_base(query)` | Search contracts & visuals |
-| `check_contractor_history(id)` | Retrieve past audit records |
-| `verify_compliance(clause)` | Text-to-image evidence search |
-| `audit_visual_evidence(clause, image)` | VLM compliance verification |
-
-## 📁 Project Structure
+## 🛠️ Project Structure
 
 ```
-├── dashboard.py           # Streamlit UI
-├── setup_qdrant.py        # Initialize vector DB
-├── ingest_data.py         # PDF/Image ingestion
-├── generate_dummy_data.py # Demo data generator
+├── main.py                # Entry point
+├── requirements.txt       # Dependencies
 ├── vouchvault/
-│   ├── analyst.py         # Agent + Tools
-│   ├── vector_store.py    # Qdrant integration
-│   └── config.py          # Settings
-└── data/
-    ├── contracts/         # PDF contracts
-    └── site_photos/       # Site images
+│   ├── analyst.py         # AI Analyst Agent (Gemini)
+│   ├── tools.py           # Compliance & Matching Tools
+│   ├── manager.py         # Orchestration Logic
+│   └── config.py          # Configuration & Dummy Data
+└── tests/                 # Unit tests
 ```
 
-## 🧪 Running Tests
+## ⚡ Quick Start
 
+1. **Install Dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. **Configure API Key**
+   Create a `.env` file or export your key:
+   ```bash
+   export GOOGLE_API_KEY="your_api_key_here"
+   ```
+
+3. **Run the Agent**
+   ```bash
+   python main.py
+   ```
+
+## 🧪 Testing
+
+Run the test suite to verify agent performance:
 ```bash
-pytest -q
-python test_qdrant_integration.py
-python test_memory_retrieval.py
-python test_vlm_tool.py
+pytest
 ```
-
-## 🏆 Built For
-
-**Convolve 4.0 Hackathon** - Demonstrating:
-- ✅ Effective Multimodal Retrieval
-- ✅ Memory Beyond Single Prompt
-- ✅ Evidence-Based Outputs with Societal Impact
